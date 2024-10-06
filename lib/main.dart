@@ -86,6 +86,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                     decoration: const InputDecoration(
                       hintText: 'Enter task name',
                     ),
+                    maxLines: null,
                   ),
                 ),
                 DropdownButton<String>(
@@ -129,12 +130,16 @@ class _TaskListScreenState extends State<TaskListScreen> {
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        _tasks[index].name,
-                        style: TextStyle(
-                          decoration: _tasks[index].isCompleted
-                              ? TextDecoration.lineThrough
-                              : TextDecoration.none,
+                      Flexible(
+                        child: Text(
+                          _tasks[index].name,
+                          style: TextStyle(
+                            decoration: _tasks[index].isCompleted
+                                ? TextDecoration.lineThrough
+                                : TextDecoration.none,
+                          ),
+                          overflow: TextOverflow.visible,
+                          softWrap: true,
                         ),
                       ),
                       _buildPriorityLabel(_tasks[index].priority),
