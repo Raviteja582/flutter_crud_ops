@@ -39,6 +39,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
   void _addTask(String taskName, String taskPriority) {
     setState(() {
       _tasks.add(Task(name: taskName, priority: taskPriority));
+      _sortTasksByPriority();
     });
     _controller.clear();
   }
@@ -52,6 +53,17 @@ class _TaskListScreenState extends State<TaskListScreen> {
   void _deleteTask(int index) {
     setState(() {
       _tasks.removeAt(index);
+    });
+  }
+
+  void _sortTasksByPriority() {
+    setState(() {
+      _tasks.sort((a, b) {
+        const priorityOrder = ['High', 'Medium', 'Low'];
+        return priorityOrder
+            .indexOf(a.priority)
+            .compareTo(priorityOrder.indexOf(b.priority));
+      });
     });
   }
 
@@ -76,22 +88,21 @@ class _TaskListScreenState extends State<TaskListScreen> {
                   ),
                 ),
                 DropdownButton<String>(
-                  value: _selectedPriority,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedPriority = newValue!;
-                    });
-                  },
-                  items: const [
-                    DropdownMenuItem(value: 'Low', child: Text('Low')),
-                    DropdownMenuItem(value: 'Medium', child: Text('Medium')),
-                    DropdownMenuItem(value: 'High', child: Text('High')),
-                  ],
-                  isDense: false,
-                  iconSize: 35,
-                  itemHeight: kMinInteractiveDimension+6.0,
-                  focusColor: Theme.of(context).focusColor
-                ),
+                    value: _selectedPriority,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedPriority = newValue!;
+                      });
+                    },
+                    items: const [
+                      DropdownMenuItem(value: 'Low', child: Text('Low')),
+                      DropdownMenuItem(value: 'Medium', child: Text('Medium')),
+                      DropdownMenuItem(value: 'High', child: Text('High')),
+                    ],
+                    isDense: false,
+                    iconSize: 35,
+                    itemHeight: kMinInteractiveDimension + 6.0,
+                    focusColor: Theme.of(context).focusColor),
                 IconButton(
                   onPressed: () {
                     if (_controller.text.isNotEmpty) {
