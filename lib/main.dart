@@ -18,8 +18,9 @@ class MyApp extends StatelessWidget {
 class Task {
   String name;
   bool isCompleted;
+  String priority;
 
-  Task({required this.name, this.isCompleted = false});
+  Task({required this.name, this.isCompleted = false, required this.priority});
 }
 
 class TaskListScreen extends StatefulWidget {
@@ -33,10 +34,11 @@ class TaskListScreen extends StatefulWidget {
 class _TaskListScreenState extends State<TaskListScreen> {
   final List<Task> _tasks = [];
   final TextEditingController _controller = TextEditingController();
+  String _selectedPriority = 'Low';
 
-  void _addTask(String taskName) {
+  void _addTask(String taskName, String taskPriority) {
     setState(() {
-      _tasks.add(Task(name: taskName));
+      _tasks.add(Task(name: taskName, priority: taskPriority));
     });
     _controller.clear();
   }
@@ -73,10 +75,27 @@ class _TaskListScreenState extends State<TaskListScreen> {
                     ),
                   ),
                 ),
+                DropdownButton<String>(
+                  value: _selectedPriority,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedPriority = newValue!;
+                    });
+                  },
+                  items: const [
+                    DropdownMenuItem(value: 'Low', child: Text('Low')),
+                    DropdownMenuItem(value: 'Medium', child: Text('Medium')),
+                    DropdownMenuItem(value: 'High', child: Text('High')),
+                  ],
+                  isDense: false,
+                  iconSize: 35,
+                  itemHeight: kMinInteractiveDimension+6.0,
+                  focusColor: Theme.of(context).focusColor
+                ),
                 IconButton(
                   onPressed: () {
                     if (_controller.text.isNotEmpty) {
-                      _addTask(_controller.text);
+                      _addTask(_controller.text, _selectedPriority);
                     }
                   },
                   icon: const Icon(Icons.add),
@@ -96,7 +115,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                     },
                   ),
                   title: Text(
-                    _tasks[index].name,
+                    '${_tasks[index].name} (${_tasks[index].priority})',
                     style: TextStyle(
                       decoration: _tasks[index].isCompleted
                           ? TextDecoration.lineThrough
