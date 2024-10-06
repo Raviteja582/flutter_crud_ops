@@ -41,6 +41,12 @@ class _TaskListScreenState extends State<TaskListScreen> {
     _controller.clear();
   }
 
+  void _toggleTaskCompletion(int index) {
+    setState(() {
+      _tasks[index].isCompleted = !_tasks[index].isCompleted;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,6 +83,12 @@ class _TaskListScreenState extends State<TaskListScreen> {
               itemCount: _tasks.length,
               itemBuilder: (context, index) {
                 return ListTile(
+                  leading: Checkbox(
+                    value: _tasks[index].isCompleted,
+                    onChanged: (bool? value) {
+                      _toggleTaskCompletion(index);
+                    },
+                  ),
                   title: Text(
                     _tasks[index].name,
                     style: TextStyle(
