@@ -47,6 +47,12 @@ class _TaskListScreenState extends State<TaskListScreen> {
     });
   }
 
+  void _deleteTask(int index) {
+    setState(() {
+      _tasks.removeAt(index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,6 +102,10 @@ class _TaskListScreenState extends State<TaskListScreen> {
                           ? TextDecoration.lineThrough
                           : TextDecoration.none,
                     ),
+                  ),
+                  trailing: IconButton(
+                    onPressed: () => _deleteTask(index),
+                    icon: const Icon(Icons.delete),
                   ),
                 );
               },
